@@ -1,5 +1,19 @@
 {
-  "name": "agent-core",
+  "name": "@viber/agent-core",
   "version": "0.1.0",
-  "private": true
+  "private": false,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@viber/agent-llm": "workspace:*",
+    "@viber/types": "workspace:*",
+    "zod": "^3.23.8"
+  }
 }

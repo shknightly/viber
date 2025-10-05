@@ -1,29 +1,29 @@
 # Viber
 
 ## Overview
-Viber is an experimental multi-agent platform designed to showcase advanced orchestration patterns across shared frontend, backend, and sandbox environments. The repository is organized as a Turborepo/Nx-style monorepo, enabling rapid iteration and code sharing between agents, UI primitives, and execution environments.
+Viber is an experimental multi-agent platform designed to showcase advanced orchestration patterns across shared frontend, backend, and sandbox environments. The repository is organized as a Turborepo/Nx-style monorepo, enabling rapid iteration and code sharing between agents, UI primitives, and execution environments. The web experience demonstrates how to integrate the Google Gemini API using the official `@google/generative-ai` SDK, stream results to the browser, and wrap everything in the Geist design system.
 
 ## Directory Structure
 ```
 /ai-agent-platform/
 │
 ├── apps/
-│   ├── web/                     # Next.js 15+ app, SSR/ISR, streaming routes, frontend UI
-│   └── sandbox/                 # WebContainer backend (e.g. StackBlitz/Cloudflare Sandboxes)
+│   ├── web/                     # Next.js 14 App Router project with streaming Gemini chat UI
+│   └── sandbox/                 # Reserved for WebContainer integrations and runtime tooling
 │
 ├── packages/
-│   ├── agent-core/              # Agent orchestration, roles, prompt templates
-│   ├── agent-llm/               # Vercel AI SDK setup, Gemini/OpenAI provider clients
-│   ├── ui/                      # shadcn/ui components (shared)
-│   ├── codemirror/              # CodeMirror React wrapper, custom extensions
-│   └── types/                   # Shared TypeScript types, Zod schemas
+│   ├── agent-core/              # Agent orchestration helpers shared across runtimes
+│   ├── agent-llm/               # Google Gemini client wrapper and streaming utilities
+│   ├── ui/                      # Geist UI footer and shared layout pieces
+│   ├── codemirror/              # Reusable CodeMirror editor component
+│   └── types/                   # Shared TypeScript models and Zod schemas
 │
 ├── prisma/                      # Database schema for task/memory persistence
 ├── docs/                        # Documentation (Markdown, Mermaid, code samples)
-├── .github/
-├── .env.example
-├── package.json
-└── turbo.json / nx.json         # Monorepo tools (Turborepo/Nx)
+├── .env.example                 # Environment variable template
+├── package.json                 # Turborepo workspace definition
+├── tsconfig.base.json           # Shared TypeScript configuration
+└── turbo.json                   # Build orchestration configuration
 ```
 
 ## Agent Roles and Responsibilities
@@ -36,27 +36,31 @@ Viber is an experimental multi-agent platform designed to showcase advanced orch
 - **Reviewer/Validator** – Performs linting, testing, and quality enforcement before deployment.
 - **SEO/Compliance Agent** – Guarantees adherence to SEO best practices and policy constraints.
 
-## Orchestration Flow
-```mermaid
-flowchart TD
-    UserInput-->Orchestrator
-    Orchestrator-->FrontendExpert
-    Orchestrator-->BackendExpert
-    Orchestrator-->PromptEngineer
-    FrontendExpert-->|Code|CodeInterpreter
-    BackendExpert-->|API Code|CodeInterpreter
-    PromptEngineer-->|Prompt|LLMClient
-    CodeInterpreter-->|Logs/Feedback|Orchestrator
-    Orchestrator-->Reviewer
-    Reviewer-->|Validation|Orchestrator
-    Orchestrator-->|Response|UserOutput
-```
+## Gemini Integration Walkthrough
+1. Requests originate from the Next.js App Router route `/api/chat`, which validates the payload using the shared `@viber/types` Zod schemas.
+2. The route delegates to `@viber/agent-core` which sanitizes the conversation history and streams completions through `@viber/agent-llm`.
+3. `@viber/agent-llm` wraps the official Google SDK to enforce safety settings, configure model parameters, and expose a `ReadableStream` for incremental delivery.
+4. The React front-end consumes the `ReadableStream`, progressively updating the conversation window and reflecting streaming status indicators.
 
 ## Getting Started
-1. Install dependencies with `pnpm install` (recommended for Turborepo/Nx workspaces).
-2. Copy `.env.example` to `.env` and populate provider keys for your LLM and vector store integrations.
-3. Use `pnpm dev --filter apps/web` to run the Next.js application and `pnpm dev --filter apps/sandbox` to start the sandbox environment when needed.
-4. Leverage shared packages from `packages/` to ensure consistent types, UI components, and orchestration logic across the monorepo.
+1. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+2. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   # Populate GOOGLE_GENAI_API_KEY with your Gemini key
+   ```
+3. **Run the development server**
+   ```bash
+   pnpm dev --filter @viber/web
+   ```
+4. **Open the app** at [http://localhost:3000](http://localhost:3000) to interact with the Gemini-powered workspace.
+
+## Testing and Linting
+- `pnpm lint --filter @viber/web` – Runs Next.js ESLint checks for the web application.
+- `pnpm build --filter @viber/web` – Validates that the Next.js build pipeline succeeds with the shared packages.
 
 ## Contribution Guidelines
 - Maintain zero-placeholder code and follow the Geist design system for UI contributions.
