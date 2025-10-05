@@ -1,5 +1,31 @@
 {
-  "name": "web",
+  "name": "@viber/web",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@geist-ui/core": "^2.5.6",
+    "@viber/agent-core": "workspace:*",
+    "@viber/codemirror": "workspace:*",
+    "@viber/types": "workspace:*",
+    "@viber/ui": "workspace:*",
+    "classnames": "^2.5.1",
+    "next": "14.2.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.12.7",
+    "@types/react": "18.2.45",
+    "@types/react-dom": "18.2.17",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.5",
+    "typescript": "5.4.5"
+  }
 }

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@viber/agent-core": ["packages/agent-core/src"],
+      "@viber/agent-llm": ["packages/agent-llm/src"],
+      "@viber/types": ["packages/types/src"],
+      "@viber/ui": ["packages/ui/src"],
+      "@viber/codemirror": ["packages/codemirror/src"]
+    }
+  },
+  "include": ["packages", "apps", "docs", "prisma", "next-env.d.ts"],
+  "exclude": ["node_modules", "dist", ".next"]
+}
